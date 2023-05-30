@@ -1,3 +1,17 @@
 <resources>
     <string name="app_name">Lion School</string>
+    <string name="login_button">Enter</string>
+    <string name="login_title">It\'s more than education, It\'s Evolution.</string>
+
+    <string name="home_greeting">Hello,</string>
+    <string name="home_welcome">Welcome to the Lion School Application!</string>
+    <string name="home_curses">Curses</string>
+
+    <string name="curses_students">Students</string>
+    <string name="filter_button_finalized">Finalized</string>
+    <string name="filter_button_studying">Studying</string>
+    <string name="filter_button_all">All</string>
+
+    <string name="performance_title">Performance</string>
+    <string name="title_activity_home">HomeActivity</string>
 </resources>
