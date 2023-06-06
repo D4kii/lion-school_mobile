@@ -1,6 +1,7 @@
 package br.senai.sp.jandira.lionschool
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -15,6 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -40,6 +42,11 @@ class MainActivity : ComponentActivity() {
 @SuppressLint("ResourceType")
 @Composable
 fun LoginScreen() {
+
+    val context = LocalContext.current
+
+
+
     Surface(
         modifier = Modifier
             .fillMaxSize()
@@ -89,7 +96,7 @@ fun LoginScreen() {
 
                             Image(
                                 modifier = Modifier
-                                    .height(200.dp),
+                                    .height(150.dp),
                                 painter = painterResource(id = R.drawable.lionschool_logo),
                                 contentDescription = "Logo",
                                 contentScale = ContentScale.Crop
@@ -114,7 +121,10 @@ fun LoginScreen() {
                             modifier = Modifier,
                             shape = RoundedCornerShape(50),
                             colors = ButtonDefaults.buttonColors(Color(255, 196, 55)),
-                            onClick = { /*TODO*/ }
+                            onClick = {
+                                var openHome = Intent(context, HomeActivity::class.java)
+                                context.startActivity(openHome)
+                            }
                         ) {
                             Text(
                                 modifier = Modifier
