@@ -14,4 +14,6 @@
 
     <string name="performance_title">Performance</string>
     <string name="title_activity_home">HomeActivity</string>
+    <string name="title_activity_student">StudentActivity</string>
+    <string name="title_activity_student_profile">StudentProfileActivity</string>
 </resources>
