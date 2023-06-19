@@ -30,6 +30,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import br.senai.sp.jandira.lionschool.model.Students
 import br.senai.sp.jandira.lionschool.model.StudentsList
+import br.senai.sp.jandira.lionschool.service.LionSchoolService
 import br.senai.sp.jandira.lionschool.service.RetrofitFactoryCourses
 import br.senai.sp.jandira.lionschool.service.RetrofitFactoryStudents
 import br.senai.sp.jandira.lionschool.ui.theme.LionSchoolTheme
@@ -73,26 +74,27 @@ fun StudentsScreen(sigla: String) {
     }
 
 
-//    val context = LocalContext.current
+    var call = RetrofitFactoryCourses().getLionSchoolService().getAlunosDoCurso(sigla = sigla)
 
-//    //Cria uma chamada para o endpoint
-//    var call = RetrofitFactoryCourses.get
-//
-//    call.enqueue(object : Callback<StudentsList> {
-//        override fun onResponse(
-//            call: Call<StudentsList>,
-//            response: Response<StudentsList>
-//        ) {
-//            studentsList = response.body()!!.estudantes
-//
-//            nameCourse = studentsList[1].curso
-//            nameCourse.split("00", "-")
-//        }
-//
-//        override fun onFailure(call: Call<StudentsList>, t: Throwable) {
-//
-//        }
-//    })
+
+
+    call.enqueue(object : Callback<StudentsList> {
+        override fun onResponse(
+            call: Call<StudentsList>,
+            response: Response<StudentsList>
+        ) {
+
+            studentsList = response.body()!!.alunos
+            Log.i("alunos", "alunos ${studentsList}")
+            nameCourse = studentsList[0].nomeCurso
+            nameCourse.split("001", " - ")
+
+        }
+
+        override fun onFailure(call: Call<StudentsList>, t: Throwable) {
+
+        }
+    })
 
 
     Surface(
@@ -134,14 +136,7 @@ fun StudentsScreen(sigla: String) {
                     fontWeight = FontWeight(weight = 200),
                     color = Color(255, 255, 255)
                 )
-                Text(
-                    text = stringResource(
-                        id = R.string.home_welcome
-                    ),
-                    fontSize = 30.sp,
-                    fontWeight = FontWeight(weight = 200),
-                    color = Color(255, 255, 255)
-                )
+
 
             }
 
@@ -156,9 +151,7 @@ fun StudentsScreen(sigla: String) {
                         true,
                         Color(52, 71, 176)
                     ),
-                color = Color(255, 255, 255),
-                shape = RoundedCornerShape( topEnd = 40.dp,
-                    topStart = 40.dp)
+                color = Color(255, 255, 255)
             ) {
                 Column(
                     modifier = Modifier
@@ -179,7 +172,7 @@ fun StudentsScreen(sigla: String) {
                         ) {
                             Image(
                                 painter = painterResource(
-                                    id = R.drawable.computador_portatil
+                                    id = R.drawable.profile
                                 ),
                                 contentDescription = "",
                                 modifier = Modifier
@@ -190,7 +183,7 @@ fun StudentsScreen(sigla: String) {
                                     .width(10.dp)
                             )
                             Text(
-                                text = stringResource(id = R.string.home_curses),
+                                text = stringResource(id = R.string.curses_students),
                                 fontSize = 25.sp,
                                 color = Color(52, 71, 176),
                             )
@@ -203,30 +196,14 @@ fun StudentsScreen(sigla: String) {
                             .padding(20.dp),
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
-                        OutlinedTextField(
-                            value = findCoursesState,
-                            onValueChange = {
-                                findCoursesState = it
-                            },
-                            modifier = Modifier
-                                .fillMaxWidth(),
-                            shape = RoundedCornerShape(20.dp),
-                            leadingIcon = {
-                                Icon(painter = painterResource(id = R.drawable.baseline_search),
-                                    contentDescription = ""
-                                )
-                            },
-                            colors = TextFieldDefaults.outlinedTextFieldColors(
-                                focusedBorderColor = Color(155, 187, 211)
-                            )
-                        )
+
 
                     }
                     LazyColumn(
-                        modifier = Modifier
-                            .padding(20.dp)
-                            .fillMaxWidth()
-                    ) {
+                        modifier = Modifier.fillMaxSize(),
+                        verticalArrangement = Arrangement.Center,
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ){
                         items(studentsList){
                             val matricula = it.matricula
                             Button(onClick = {
@@ -245,7 +222,7 @@ fun StudentsScreen(sigla: String) {
                                     verticalAlignment = Alignment.CenterVertically
                                 ) {
                                     AsyncImage(
-                                        model = it.foto, contentDescription = "",
+                                        model = it.foto, contentDescription = "Foto do Aluno",
                                         modifier = Modifier.height(116.dp).width(117.dp),
                                         alignment = Alignment.Center,
                                         contentScale = ContentScale.Crop
@@ -260,11 +237,7 @@ fun StudentsScreen(sigla: String) {
                                 }
 
                             }
-
-
                         }
-
-                    }
 
                 }
 
@@ -276,6 +249,9 @@ fun StudentsScreen(sigla: String) {
 
 
 
+
+
+}
 fun openStudents(context: Context, matricula: String){
     val openStudent = Intent(context, StudentProfileActivity()::class.java)
     openStudent.putExtra("matricula", matricula.toString())
@@ -293,8 +269,7 @@ fun confirmStatus(status: String): Color {
         return colorFinalizado
     }
 }
-
-@Preview(showBackground = true)
+@Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun DefaultPreview3() {
     LionSchoolTheme {
